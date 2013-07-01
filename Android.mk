@@ -19,13 +19,13 @@ LOCAL_PATH := $(call my-dir)
 #Creating Gralloc SymLink
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := gralloc.omap4.so
+LOCAL_MODULE := gralloc.bad.so
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := FAKE
 
 include $(BUILD_SYSTEM)/base_rules.mk
 
-$(LOCAL_BUILT_MODULE): GRALLOC_FILE := gralloc.omap4430.so
+$(LOCAL_BUILT_MODULE): GRALLOC_FILE := gralloc.bad.so
 $(LOCAL_BUILT_MODULE): SYMLINK := $(TARGET_OUT_VENDOR)/lib/hw/$(LOCAL_MODULE)
 $(LOCAL_BUILT_MODULE): $(LOCAL_PATH)/Android.mk
 $(LOCAL_BUILT_MODULE):
