@@ -119,8 +119,8 @@ PRODUCT_PACKAGES += \
     smc_pa_ctrl \
     tf_daemon \
     libtf_crypto_sst \
-    libmm_osal \
-    gralloc.omap4.so
+    libmm_osal
+#    gralloc.omap4.so
 
 PRODUCT_PACKAGES += \
     evtest \
@@ -172,7 +172,7 @@ PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/root/ueventd.mapphone.rc:/root/ueventd.mapphone_umts.rc
 
 # Kexec files
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/kexec/arm_kexec.ko:system/etc/kexec/arm_kexec.ko \
     $(COMMON_FOLDER)/kexec/kexec.ko:system/etc/kexec/kexec.ko \
     $(COMMON_FOLDER)/kexec/uart.ko:system/etc/kexec/uart.ko \
@@ -185,8 +185,9 @@ PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/prebuilt/bin/fixboot.sh:/root/sbin/fixboot.sh
 
 # sw vsync setting
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.hwc.sw_vsync=1
+#PRODUCT_PROPERTY_OVERRIDES += \
+    persist.hwc.sw_vsync=1 \
+    persist.hwc.sw_vsync_rate=50
 
 # General
 PRODUCT_PROPERTY_OVERRIDES += \
