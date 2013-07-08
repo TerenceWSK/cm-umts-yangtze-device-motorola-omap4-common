@@ -13,9 +13,9 @@ PDS_FILE=/data/pdsdata.img
 mount_pds_image() {
     mkdir -p /pds
     umount /pds 2>/dev/null
-    losetup -d /dev/block/loop7 2>/dev/null
-    losetup /dev/block/loop7 $PDS_FILE
-    busybox mount -o rw,nosuid,nodev,noatime,nodiratime,barrier=1 /dev/block/loop7 /pds
+    losetup -d /dev/block/loop6 2>/dev/null
+    losetup /dev/block/loop6 $PDS_FILE
+    busybox mount -o rw,nosuid,nodev,noatime,nodiratime,barrier=1 /dev/block/loop6 /pds
 }
 
 if [ -f /data/pds.img ]; then
@@ -25,7 +25,7 @@ fi
 
 if [ ! -f $PDS_FILE ] ; then
     #make a copy of pds in /data
-    dd if=/dev/block/mmcblk1p7 of=$PDS_FILE bs=4096
+    dd if=/dev/block/mmcblk1p6 of=$PDS_FILE bs=4096
 
     #mount the fake pds
     mount_pds_image
