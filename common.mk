@@ -21,11 +21,8 @@ COMMON_FOLDER := device/motorola/omap4-common
 # The gps config appropriate for this device
 PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/prebuilt/bin/pdsbackup.sh:system/bin/pdsbackup.sh \
-    $(COMMON_FOLDER)/prebuilt/bin/wifical.sh:system/bin/wifical.sh \
-    $(COMMON_FOLDER)/prebuilt/bin/wificalcheck.sh:system/bin/wificalcheck.sh \
     $(COMMON_FOLDER)/prebuilt/etc/gps.conf:system/etc/gps.conf \
-    $(COMMON_FOLDER)/prebuilt/etc/localprop:system/etc/localprop \
-    $(COMMON_FOLDER)/prebuilt/etc/wifi/wlan_fem.ini:system/etc/wifi/wlan_fem.ini
+    $(COMMON_FOLDER)/prebuilt/etc/localprop:system/etc/localprop
 
 # Device overlay
 DEVICE_PACKAGE_OVERLAYS += $(COMMON_FOLDER)/overlay
@@ -151,7 +148,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
 # WLAN firmware
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/firmware/ti-connectivity/wl128x-fw-4-mr.bin:system/etc/firmware/ti-connectivity/wl128x-fw-4-mr.bin \
     $(COMMON_FOLDER)/firmware/ti-connectivity/wl128x-fw-4-plt.bin:system/etc/firmware/ti-connectivity/wl128x-fw-4-plt.bin \
     $(COMMON_FOLDER)/firmware/ti-connectivity/wl128x-fw-4-sr.bin:system/etc/firmware/ti-connectivity/wl128x-fw-4-sr.bin \
