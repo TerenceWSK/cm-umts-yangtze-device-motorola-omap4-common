@@ -100,6 +100,8 @@ void __TIMM_OSAL_TraceFunction(const __TIMM_OSAL_TRACE_LOCATION * loc,
 		    val ? strtol(val, NULL, 0) : DEFAULT_TRACE_LEVEL;
 	}
 
+        //trace_level = 5; // Enable all trace.
+
 	if (trace_level >= loc->level)
 	{
 		va_list ap;

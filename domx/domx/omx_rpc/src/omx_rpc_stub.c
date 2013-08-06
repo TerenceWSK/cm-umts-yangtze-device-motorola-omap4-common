@@ -1068,10 +1068,10 @@ RPC_OMX_ERRORTYPE RPC_UseBuffer(OMX_HANDLETYPE hRPCCtx,
 		DOMX_DEBUG("Metadata buffer = %d",((OMX_TI_PLATFORMPRIVATE *)pBufferHdr->pPlatformPrivate)->pMetaDataBuffer);
 	}
 
-	DOMX_DEBUG("About to send packet");
+	//DOMX_DEBUG("About to send packet");
 	RPC_sendPacket_sync(hCtx, pPacket, nPacketSize, nFxnIdx, pRetPacket,
 	    nSize);
-	DOMX_DEBUG("Remote call returned");
+	//DOMX_DEBUG("Remote call returned");
 
 	*eCompReturn = (OMX_ERRORTYPE) (((struct omx_packet *) pRetPacket)->result);
 

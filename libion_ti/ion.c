@@ -17,6 +17,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -32,11 +33,18 @@ typedef unsigned int u32;
 #include "ion.h"
 #include "omap_ion.h"
 
+static inline long IS_ERR_OR_NULL(const void *ptr)
+{
+	return !ptr || (ptr) >= (unsigned long)-4095;
+}
+
 int ion_open()
 {
         int fd = open("/dev/ion", O_RDWR);
         if (fd < 0)
-                ALOGE("open /dev/ion failed!\n");
+                ALOGE("%s: Open /dev/ion failed!\n", __func__);\
+        else
+            ALOGE("%s: fd=0x%x", __func__, fd);
         return fd;
 }
 
@@ -50,8 +58,8 @@ static int ion_ioctl(int fd, int req, void *arg)
         ALOGD("%s: fd=%d, ioctl op=0x%x", __func__, req);
         int ret = ioctl(fd, req, arg);
         if (ret < 0) {
-                ALOGE("ioctl %d failed with code %d: %s\n", req,
-                       ret, strerror(errno));
+                ALOGE("%s: ioctl %d failed with code %d: %s, fd=0x%x\n", __func__, req,
+                       ret, strerror(errno), fd);
                 return -errno;
         }
         return ret;
@@ -67,11 +75,17 @@ int ion_alloc(int fd, size_t len, size_t align, unsigned int flags,
                 .flags = flags,
         };
 
+        //ALOGE("%s: fd=0x%x, len=0x%x, align=0x%x, flags=0x%x", __func__, fd, len, align, flags);
         ret = ion_ioctl(fd, ION_IOC_ALLOC, &data);
         ALOGD("%s: op=0x%x, fd=%d, len=0x%x, align=0x%x, flags=0x%x, ret=0x%x", __func__, ION_IOC_ALLOC, fd, (unsigned long)len, (unsigned long)align, flags, ret);
         if (ret < 0)
                 return ret;
-        *handle = data.handle;
+
+	if (IS_ERR_OR_NULL(data.handle))
+	    ret= -EINVAL;
+        else
+            *handle = data.handle;
+        //ALOGE("%s: fd=0x%x, handle=0x%x, ret=%d", __func__, fd, *handle, ret);
         return ret;
 }
 
@@ -93,12 +107,13 @@ int ion_alloc_tiler(int fd, size_t w, size_t h, int fmt, unsigned int flags,
                 .arg = (unsigned long)(&alloc_data),
         };
 
-        ret = ion_ioctl(fd, ION_IOC_CUSTOM, &custom_data);\
-        ALOGD("%s: op=0x%x, fd=%d, w=0x%x, h=0x%x, fmt=0x%x, flags=0x%x, ret=0x%x", __func__, ION_IOC_CUSTOM, fd, (unsigned long)w, (unsigned long)h, fmt, flags, ret);
+        //ALOGE("%s: fd=0x%x, w=0x%x, h=0x%x, flags=0x%x", __func__, fd, w, h, flags);
+        ret = ion_ioctl(fd, ION_IOC_CUSTOM, &custom_data);
         if (ret < 0)
                 return ret;
         *stride = alloc_data.stride;
         *handle = alloc_data.handle;
+        //ALOGE("%s: fd=0x%x, handle=0x%x, stride=0x%x", __func__, fd, *handle, *stride);
         return ret;
 }
 
@@ -108,7 +123,7 @@ int ion_free(int fd, struct ion_handle *handle)
                 .handle = handle,
         };
 
-        ALOGD("%s: fd=%d", __func__, fd);
+        //ALOGE("%s: fd=0x%x, handle=0x%x", __func__, fd, handle);
         return ion_ioctl(fd, ION_IOC_FREE, &data);
 }
 
@@ -118,18 +133,20 @@ int ion_map(int fd, struct ion_handle *handle, size_t length, int prot,
         struct ion_fd_data data = {
                 .handle = handle,
         };
+        
+        //ALOGE("%s: fd=0x%x, length=0x%x, offset=0x%x, flags=0x%x", __func__, fd, length, offset, flags);
         int ret = ion_ioctl(fd, ION_IOC_MAP, &data);
         ALOGD("%s: op=0x%x, fd=%d, ret=0x%x", __func__, ION_IOC_MAP, fd, ret);
         if (ret < 0)
                 return ret;
         *map_fd = data.fd;
         if (*map_fd < 0) {
-                ALOGE("map ioctl returned negative fd\n");
+                ALOGE("%s: map ioctl returned negative fd\n",__func__);
                 return -EINVAL;
         }
         *ptr = mmap(NULL, length, prot, flags, *map_fd, offset);
         if (*ptr == MAP_FAILED) {
-                ALOGE("mmap failed: %s\n", strerror(errno));
+                ALOGE("%s: mmap failed: %s\n", __func__, strerror(errno));
                 return -errno;
         }
         return ret;
@@ -190,6 +207,7 @@ int ion_map_cacheable(int fd, struct ion_handle *handle, size_t length, int prot
         return ret;
 }
 
+/*
 int ion_flush_cached(int fd, struct ion_handle *handle, size_t length,
             unsigned char *ptr)
 {
@@ -215,4 +233,5 @@ int ion_inval_cached(int fd, struct ion_handle *handle, size_t length,
         ALOGD("%s: op=0x%x, fd=%d", __func__, ION_IOC_INVAL_CACHED, fd);
         return ion_ioctl(fd, ION_IOC_INVAL_CACHED, &data);
 }
+//*/
 
