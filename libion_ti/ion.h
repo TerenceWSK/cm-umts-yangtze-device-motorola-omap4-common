@@ -1,49 +1,76 @@
-/*
- *  ion.c
- *
- * Memory Allocator functions for ion
- *
- *   Copyright 2011 Google, Inc
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
-#ifndef __TI_ION_H
-#define __TI_ION_H
-
-#include "linux_ion.h"
-#include "omap_ion.h"
-
-__BEGIN_DECLS
-
-int ion_open();
-int ion_close(int fd);
-int ion_alloc(int fd, size_t len, size_t align, unsigned int flags,
-              struct ion_handle **handle);
-int ion_alloc_tiler(int fd, size_t w, size_t h, int fmt, unsigned int flags,
-		    struct ion_handle **handle, size_t *stride);
-int ion_free(int fd, struct ion_handle *handle);
-int ion_map(int fd, struct ion_handle *handle, size_t length, int prot,
-            int flags, off_t offset, unsigned char **ptr, int *map_fd);
-int ion_share(int fd, struct ion_handle *handle, int *share_fd);
-int ion_import(int fd, int share_fd, struct ion_handle **handle);
-int ion_map_cacheable(int fd, struct ion_handle *handle, size_t length,
-        int prot, int flags, off_t offset, unsigned char **ptr, int *map_fd);
-int ion_flush_cached(int fd, struct ion_handle *handle, size_t length,
-            unsigned char *ptr);
-int ion_inval_cached(int fd, struct ion_handle *handle, size_t length,
-            unsigned char *ptr);
-
-__END_DECLS
-
-#endif /* __TI_ION_H */
+/****************************************************************************
+ ****************************************************************************
+ ***
+ ***   This header was automatically generated from a Linux kernel header
+ ***   of the same name, to make information necessary for userspace to
+ ***   call into the kernel available to libc.  It contains only constants,
+ ***   structures, and macros generated from the original header, and thus,
+ ***   contains no copyrightable information.
+ ***
+ ***   To edit the content of this header, modify the corresponding
+ ***   source file (e.g. under external/kernel-headers/original/) then
+ ***   run bionic/libc/kernel/tools/update_all.py
+ ***
+ ***   Any manual change here will be lost the next time this script will
+ ***   be run. You've been warned!
+ ***
+ ****************************************************************************
+ ****************************************************************************/
+#ifndef _LINUX_ION_H
+#define _LINUX_ION_H
+#include <linux/types.h>
+struct ion_handle;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+enum ion_heap_type {
+ ION_HEAP_TYPE_SYSTEM,
+ ION_HEAP_TYPE_SYSTEM_CONTIG,
+ ION_HEAP_TYPE_CARVEOUT,
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ ION_HEAP_TYPE_CUSTOM,
+ ION_NUM_HEAPS,
+};
+#define ION_HEAP_SYSTEM_MASK (1 << ION_HEAP_TYPE_SYSTEM)
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define ION_HEAP_SYSTEM_CONTIG_MASK (1 << ION_HEAP_TYPE_SYSTEM_CONTIG)
+#define ION_HEAP_CARVEOUT_MASK (1 << ION_HEAP_TYPE_CARVEOUT)
+struct ion_allocation_data {
+ size_t len;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+ size_t align;
+ unsigned int flags;
+ struct ion_handle *handle;
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct ion_fd_data {
+ struct ion_handle *handle;
+ int fd;
+ unsigned char cacheable;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
+struct ion_handle_data {
+ struct ion_handle *handle;
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct ion_custom_data {
+ unsigned int cmd;
+ unsigned long arg;
+};
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+struct ion_cached_user_buf_data {
+ struct ion_handle *handle;
+ unsigned long vaddr;
+ size_t size;
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+};
+#define ION_IOC_MAGIC 'I'
+#define ION_IOC_ALLOC _IOWR(ION_IOC_MAGIC, 0,   struct ion_allocation_data)
+#define ION_IOC_FREE _IOWR(ION_IOC_MAGIC, 1, struct ion_handle_data)
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define ION_IOC_MAP _IOWR(ION_IOC_MAGIC, 2, struct ion_fd_data)
+#define ION_IOC_SHARE _IOWR(ION_IOC_MAGIC, 4, struct ion_fd_data)
+#define ION_IOC_IMPORT _IOWR(ION_IOC_MAGIC, 5, int)
+#define ION_IOC_CUSTOM _IOWR(ION_IOC_MAGIC, 6, struct ion_custom_data)
+/* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
+#define ION_IOC_FLUSH_CACHED _IOWR(ION_IOC_MAGIC, 7,   struct ion_cached_user_buf_data)
+#define ION_IOC_INVAL_CACHED _IOWR(ION_IOC_MAGIC, 8,   struct ion_cached_user_buf_data)
+#endif
